@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jonathan Socoy - Data Scientist & Spatial Analyst</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #0a192f;
+            --light-navy: #112240;
+            --lightest-navy: #233554;
+            --navy-shadow: rgba(2, 12, 27, 0.7);
+            --dark-slate: #495670;
+            --slate: #8892b0;
+            --light-slate: #a8b2d1;
+            --lightest-slate: #ccd6f6;
+            --white: #e6f1ff;
+            --coral: #ff6b5a;
+            --coral-tint: rgba(255, 107, 90, 0.1);
+            --font-mono: 'Space Mono', monospace;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--dark-slate) var(--navy);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--navy);
+            color: var(--slate);
+            line-height: 1.3;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background-color: var(--lightest-navy);
+            color: var(--lightest-slate);
+        }
+
+        /* FIXED SIDEBAR */
+        .sidebar-left {
+            position: fixed;
+            bottom: 0;
+            left: 40px;
+            width: 40px;
+            z-index: 10;
+        }
+
+        .sidebar-left ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sidebar-left ul::after {
+            content: "";
+            display: block;
+            width: 1px;
+            height: 90px;
+            background-color: var(--light-slate);
+            margin-top: 20px;
+        }
+
+        .sidebar-left a {
+            color: var(--light-slate);
+            transition: var(--transition);
+            font-size: 20px;
+        }
+
+        .sidebar-left a:hover {
+            color: var(--coral);
+            transform: translateY(-3px);
+        }
+
+        .sidebar-right {
+            position: fixed;
+            bottom: 0;
+            right: 40px;
+            width: 40px;
+            z-index: 10;
+        }
+
+        .sidebar-right a {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            writing-mode: vertical-rl;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            color: var(--light-slate);
+            transition: var(--transition);
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .sidebar-right a:hover {
+            color: var(--coral);
+            transform: translateY(-3px);
+        }
+
+        .sidebar-right::after {
+            content: "";
+            display: block;
+            width: 1px;
+            height: 90px;
+            background-color: var(--light-slate);
+            margin: 0 auto;
+        }
+
+        /* NAVIGATION */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding: 0 50px;
+            height: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--coral);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            text-decoration: none;
+            color: var(--lightest-slate);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--coral);
+        }
+
+        .nav-links .number {
+            color: var(--coral);
+            margin-right: 5px;
+        }
+
+        /* MAIN CONTENT */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 150px;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 100px 0;
+        }
+
+        .numbered-heading {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin: 10px 0 40px;
+            width: 100%;
+            font-size: clamp(26px, 5vw, 32px);
+            white-space: nowrap;
+            font-weight: 600;
+            color: var(--lightest-slate);
+        }
+
+        .numbered-heading::before {
+            content: attr(data-number);
+            font-family: var(--font-mono);
+            font-size: clamp(16px, 3vw, 20px);
+            color: var(--coral);
+            margin-right: 10px;
+            font-weight: 400;
+        }
+
+        .numbered-heading::after {
+            content: "";
+            display: block;
+            position: relative;
+            width: 300px;
+            height: 1px;
+            margin-left: 20px;
+            background-color: var(--lightest-navy);
+        }
+
+        /* HERO */
+        #hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .hero-intro {
+            font-family: var(--font-mono);
+            color: var(--coral);
+            font-size: clamp(14px, 5vw, 16px);
+            margin-bottom: 30px;
+        }
+
+        .hero-title {
+            font-size: clamp(40px, 8vw, 80px);
+            font-weight: 700;
+            color: var(--lightest-slate);
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(40px, 8vw, 80px);
+            font-weight: 700;
+            color: var(--slate);
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-description {
+            max-width: 750px;
+            margin-top: 25px;
+            font-size: 20px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 1.25rem 1.75rem;
+            border: 1px solid var(--coral);
+            border-radius: 4px;
+            background-color: transparent;
+            color: var(--coral);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--coral-tint);
+        }
+
+        /* ABOUT */
+        #about .about-content {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 50px;
+        }
+
+        #about p {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .skills-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(140px, 200px));
+            gap: 10px;
+            padding: 0;
+            margin: 20px 0 0;
+            list-style: none;
+        }
+
+        .skills-list li {
+            position: relative;
+            padding-left: 20px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+
+        .skills-list li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: var(--coral);
+            font-size: 14px;
+            line-height: 12px;
+        }
+
+        .about-image {
+            position: relative;
+            max-width: 400px;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 4px;
+            background-color: var(--coral);
+            transition: var(--transition);
+        }
+
+        .about-image-wrapper:hover {
+            transform: translate(-5px, -5px);
+        }
+
+        .about-image-wrapper img {
+            width: 100%;
+            border-radius: 4px;
+            filter: grayscale(100%) contrast(1);
+            mix-blend-mode: multiply;
+            transition: var(--transition);
+        }
+
+        .about-image-wrapper:hover img {
+            filter: grayscale(0%) contrast(1);
+            mix-blend-mode: normal;
+        }
+
+        /* EXPERIENCE */
+        .experience-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .experience-tabs button {
+            background: transparent;
+            border: none;
+            border-left: 2px solid var(--lightest-navy);
+            color: var(--slate);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            padding: 10px 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .experience-tabs button:hover {
+            background-color: var(--light-navy);
+            color: var(--coral);
+        }
+
+        .experience-tabs button.active {
+            border-left-color: var(--coral);
+            color: var(--coral);
+            background-color: var(--light-navy);
+        }
+
+        .experience-content {
+            min-height: 350px;
+        }
+
+        .experience-panel {
+            display: none;
+        }
+
+        .experience-panel.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .experience-panel h3 {
+            color: var(--lightest-slate);
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .experience-panel h3 .company {
+            color: var(--coral);
+        }
+
+        .experience-panel .range {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--light-slate);
+            margin-bottom: 25px;
+        }
+
+        .experience-panel ul {
+            padding-left: 20px;
+        }
+
+        .experience-panel li {
+            position: relative;
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            line-height: 1.5;
+            list-style: none;
+        }
+
+        .experience-panel li::before {
+            content: "▹";
+            position: absolute;
+            left: -10px;
+            color: var(--coral);
+        }
+
+        /* PROJECTS */
+        .projects-grid {
+            display: grid;
+            gap: 15px;
+            position: relative;
+        }
+
+        .project-card {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            align-items: center;
+            margin-bottom: 100px;
+        }
+
+        .project-card:nth-of-type(2n) .project-content {
+            grid-column: 7 / -1;
+            text-align: right;
+        }
+
+        .project-card:nth-of-type(2n) .project-image {
+            grid-column: 1 / 8;
+        }
+
+        .project-card:nth-of-type(2n) .project-tech-list {
+            justify-content: flex-end;
+        }
+
+        .project-content {
+            position: relative;
+            grid-column: 1 / 7;
+            grid-row: 1 / -1;
+            z-index: 2;
+        }
+
+        .project-overline {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--coral);
+            margin-bottom: 10px;
+        }
+
+        .project-title {
+            color: var(--lightest-slate);
+            font-size: clamp(24px, 5vw, 28px);
+            margin-bottom: 20px;
+        }
+
+        .project-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .project-title a:hover {
+            color: var(--coral);
+        }
+
+        .project-description {
+            background-color: var(--light-navy);
+            padding: 25px;
+            border-radius: 4px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px -15px var(--navy-shadow);
+        }
+
+        .project-tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            list-style: none;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--light-slate);
+            margin-bottom: 10px;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .project-card:nth-of-type(2n) .project-links {
+            justify-content: flex-end;
+        }
+
+        .project-links a {
+            color: var(--lightest-slate);
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .project-links a:hover {
+            color: var(--coral);
+        }
+
+        .project-image {
+            grid-column: 6 / -1;
+            grid-row: 1 / -1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-image-wrapper {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .project-image-wrapper::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: var(--navy);
+            mix-blend-mode: screen;
+            transition: var(--transition);
+            z-index: 3;
+        }
+
+        .project-image-wrapper:hover::before {
+            background: transparent;
+        }
+
+        .project-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            filter: grayscale(100%) contrast(1) brightness(90%);
+            transition: var(--transition);
+        }
+
+        .project-image-wrapper:hover img {
+            filter: grayscale(0%) contrast(1) brightness(100%);
+        }
+
+        /* CONTACT */
+        #contact {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #contact .overline {
+            font-family: var(--font-mono);
+            font-size: 16px;
+            color: var(--coral);
+            margin-bottom: 20px;
+        }
+
+        #contact h2 {
+            font-size: clamp(40px, 5vw, 60px);
+            color: var(--lightest-slate);
+            margin-bottom: 10px;
+        }
+
+        #contact p {
+            font-size: 18px;
+            max-width: 540px;
+            margin: 0 auto 50px;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 15px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--light-slate);
+        }
+
+        footer a {
+            color: var(--coral);
+            text-decoration: none;
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+
+            .sidebar-left,
+            .sidebar-right {
+                display: none;
+            }
+
+            nav {
+                padding: 0 25px;
+                height: 70px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            main {
+                padding: 0 25px;
+            }
+
+            section {
+                padding: 80px 0;
+            }
+
+            .numbered-heading::after {
+                width: 100%;
+            }
+
+            #about .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card {
+                grid-template-columns: 1fr;
+                margin-bottom: 70px;
+            }
+
+            .project-content,
+            .project-card:nth-of-type(2n) .project-content {
+                grid-column: 1 / -1;
+                padding: 40px 40px 30px;
+                text-align: left;
+            }
+
+            .project-image,
+            .project-card:nth-of-type(2n) .project-image {
+                grid-column: 1 / -1;
+                opacity: 0.25;
+            }
+
+            .project-description {
+                padding: 20px 0;
+                background-color: transparent;
+                box-shadow: none;
+            }
+
+            .project-tech-list,
+            .project-card:nth-of-type(2n) .project-tech-list {
+                justify-content: flex-start;
+            }
+
+            .project-links,
+            .project-card:nth-of-type(2n) .project-links {
+                justify-content: flex-start;
+            }
+        }
+
+        /* ANIMATIONS */
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar-left">
+        <ul>
+            <li><a href="https://github.com/socoyjonathan" target="_blank" aria-label="GitHub">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                        </path>
+                    </svg>
+                </a></li>
+            <li><a href="https://www.linkedin.com/in/jonathan-socoy/" target="_blank" aria-label="LinkedIn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </a></li>
+        </ul>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar-right">
+        <a href="mailto:socoyjonathan@gmail.com">socoyjonathan@gmail.com</a>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="logo">JS</div>
+        <ul class="nav-links">
+            <li><a href="#about"><span class="number">01.</span> About</a></li>
+            <li><a href="#research"><span class="number">02.</span> Research</a></li>
+            <li><a href="#work"><span class="number">03.</span> Work</a></li>
+            <li><a href="#contact"><span class="number">04.</span> Contact</a></li>
+            <li><a href="#interests"><span class="number">05.</span> More</a></li>
+            <li><a href="/resume.pdf" class="btn" style="margin: 0; padding: 10px 15px;">Resume</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- HERO -->
+        <section id="hero">
+            <div class="hero-intro fade-in">Hi, my name is</div>
+            <h1 class="hero-title fade-in">Jonathan Sucuc.</h1>
+            <h2 class="hero-subtitle fade-in">I turn data into insights.</h2>
+            <p class="hero-description fade-in">
+                I'm a data scientist who builds predictive models and end-to-end ML pipelines.
+                I specialize in turning messy, complex data into clear, actionable insights.
+            </p>
+            <a href="#work" class="btn fade-in">View My Work</a>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+            <h2 class="numbered-heading" data-number="01.">About Me</h2>
+            <div class="about-content">
+                <div>
+                    <p>
+                        Now that I have your full attention, let me tell you how my journey began.
+                        I got hooked on data science through mathematical modeling
+                        competitions and incredible research projects at Columbia University, where I discovered that
+                        the right algorithm could unlock
+                        patterns hidden in massive datasets.
+                    </p>
+                    <p>
+                        Since then, I've worked across research labs building predictive models for everything
+                        from NYC real estate trends to coastal storm surge forecasting. I love the entire ML
+                        pipeline—wrangling messy data, engineering features, training ensemble models, and
+                        validating results with rigorous statistical tests.
+                    </p>
+                    <p>
+                        Whether it's achieving 92% accuracy on classification tasks or optimizing time series
+                        forecasts, I'm driven by turning complex data into actionable insights. My work spans
+                        urban analytics, climate modeling, and economic prediction—always focused on building
+                        robust, interpretable models.
+                    </p>
+                    <p>Here are some technologies I've been working with recently:</p>
+                    <ul class="skills-list">
+                        <li>Python, R (Tidyverse)</li>
+                        <li>Machine Learning</li>
+                        <li>SQL & Database Design</li>
+                        <li>Time Series Modeling</li>
+                        <li>Statistical Testing </li>
+                        <li>Git & Version Control</li>
+                    </ul>
+                </div>
+                <div class="about-image">
+                    <div class="about-image-wrapper">
+                        <img src="images/profile_photo.png" alt="Jonathan Socoy">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- RESEARCH -->
+        <section id="experience">
+            <h2 class="numbered-heading" data-number="02.">Research Experience</h2>
+
+            <div class="experience-tabs">
+                <button class="tab-button research-tab active" data-tab="research1">Columbia University: Mathematical
+                    Modeling</button>
+                <button class="tab-button research-tab" data-tab="research2">Hirsa Lab</button>
+                <button class="tab-button research-tab" data-tab="research3">Mandli Lab</button>
+            </div>
+
+            <div class="experience-content">
+                <div id="research1" class="experience-panel active">
+                    <h3>Mathematical Modeling & Machine Learning Researcher <span class="company">@ Columbia
+                            University</span></h3>
+                    <p class="range">June 2021 - May 2024</p>
+                    <ul>
+                        <li>Developed ensemble machine learning models (Random Forest, XGBoost) achieving up to 92%
+                            prediction
+                            accuracy on MCM datasets</li>
+                        <li>Engineered feature pipelines with dimensionality reduction (PCA) reducing feature space by
+                            30% while maintaining model performance</li>
+                        <li>Conducted rigorous statistical validation using F-tests and ANOVA to assess model
+                            significance
+                            and feature importance across multivariable regression frameworks</li>
+                        <li>Built interactive visualizations and analytical dashboards using Matplotlib and Seaborn for
+                            stakeholder presentations</li>
+                    </ul>
+                </div>
+
+                <div id="research2" class="experience-panel">
+                    <h3>Data Science Researcher <span class="company">@ Professor Ali Hirsa's Lab</span>
+                    </h3>
+                    <p class="range">September 2023 - January 2024</p>
+                    <ul>
+                        <li>Architected ETL pipeline transforming 500K+ Yelp Business API records into normalized SQL
+                            database schema</li>
+                        <li>Performed spatial-temporal analysis revealing correlation between business turnover rates
+                            and property value changes</li>
+                        <li>Created longitudinal tracking system for business evolution patterns across NYC
+                            neighborhoods</li>
+                    </ul>
+                </div>
+
+                <div id="research3" class="experience-panel">
+                    <h3>Computational Research Assistant <span class="company">@ Professor Kyle Mandli's Lab</span></h3>
+                    <p class="range">May 2021 - June 2022</p>
+                    <ul>
+                        <li>Automated data acquisition pipeline using BeautifulSoup and API integration to extract 10+
+                            years of NOAA tide and storm surge observations</li>
+                        <li>Optimized tidal prediction algorithms in Clawpack through ensemble time series techniques
+                        </li>
+                        <li>Performed statistical analysis on storm surge patterns using Pandas for data wrangling and
+                            time series decomposition</li>
+                        <li>Contributed to open-source climate modeling tools with improvements to coastal flooding
+                            predictions</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="work">
+            <h2 class="numbered-heading" data-number="03.">Some Things I've Built</h2>
+
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <p class="project-overline">Featured Project</p>
+                        <h3 class="project-title">
+                            <a href="https://socoyjonathan.github.io/STA9750-2025-FALL/final_project.html"
+                                target="_blank">
+                                COVID-19 & NYC Property Values
+                            </a>
+                        </h3>
+                        <div class="project-description">
+                            An end-to-end geospatial analysis examining whether population density
+                            became a housing price penalty after COVID-19. Built parcel-to-district
+                            crosswalks, performed area-weighted spatial joins, and conducted regression
+                            analysis across 59 NYC community districts.
+                        </div>
+                        <ul class="project-tech-list">
+                            <li>R (VIF, tidycensus, leaflet) </li>
+                            <li>PLUTO & ACS Data</li>
+                            <li>Regression Analysis (ANOVA)</li>
+                        </ul>
+                        <div class="project-links">
+                            <a href="https://github.com/socoyjonathan/STA9750-2025-FALL/blob/main/final_project.qmd"
+                                target="_blank" aria-label="GitHub">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="https://socoyjonathan.github.io/STA9750-2025-FALL/final_project.html"
+                                target="_blank" aria-label="External Link">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-image">
+                        <div class="project-image-wrapper">
+                            <img src="images/nyc_property_analysis.png" alt="NYC Property Analysis">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <p class="project-overline">Featured Project</p>
+                        <h3 class="project-title">
+                            <a href="https://socoyjonathan.github.io/STA9750-2025-FALL/mp02.html" target="_blank">
+                                Housing Affordability Analysis
+                            </a>
+                        </h3>
+                        <div class="project-description">
+                            Metro-level affordability study exploring rent burden and housing growth dynamics.
+                            Constructed standardized indices, compared CBSA-level patterns, and developed
+                            policy recommendations for YIMBY-style housing incentives.
+                        </div>
+                        <ul class="project-tech-list">
+                            <li>R (tidyverse, tidycensus)</li>
+                            <li>Policy Analysis</li>
+                            <li>Data Visualization (ggplot2)</li>
+                        </ul>
+                        <div class="project-links">
+                            <a href="https://github.com/socoyjonathan/STA9750-2025-FALL/blob/main/mp03.qmd"
+                                target="_blank" aria-label="GitHub">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="https://socoyjonathan.github.io/STA9750-2025-FALL/mp02.html" target="_blank"
+                                aria-label="External Link">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-image">
+                        <div class="project-image-wrapper">
+                            <img src="images/housing_affordability.png" alt="Housing Affordability">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <p class="project-overline">Featured Project</p>
+                        <h3 class="project-title">
+                            <a href="https://socoyjonathan.github.io/STA9750-2025-FALL/mp03.html" target="_blank">
+                                NYC Green Canopy Visualization
+                            </a>
+                        </h3>
+                        <div class="project-description">
+                            Geospatial study of NYC's 600,000+ street trees across City Council Districts.
+                            Performed point-in-polygon spatial joins, mapped tree health conditions, and
+                            identified environmental equity gaps to guide urban forestry interventions.
+                        </div>
+                        <ul class="project-tech-list">
+                            <li>R (httr2, rvest, sf) </li>
+                            <li>NYC Open Data</li>
+                            <li>Spatial Analysis (ggplot2,leaflet) </li>
+                        </ul>
+                        <div class="project-links">
+                            <a href="https://github.com/socoyjonathan/STA9750-2025-FALL/blob/main/mp03.qmd"
+                                target="_blank" aria-label="GitHub">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="https://socoyjonathan.github.io/STA9750-2025-FALL/mp01.html" target="_blank"
+                                aria-label="External Link">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-image">
+                        <div class="project-image-wrapper">
+                            <img src="images/tree_distribution.png" alt="Green Canopy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact">
+            <p class="overline">04. What's Next?</p>
+            <h2>Get In Touch</h2>
+            <p>
+                I'm currently looking for new opportunities in data science and spatial analytics.
+                Whether you have a question or just want to say hi, I'll do my best to get back to you!
+            </p>
+            <a href="mailto:socoyjonathan@gmail.com" class="btn">Say Hello</a>
+        </section>
+
+
+        <!-- OTHER INTERESTS -->
+        <section id="interests" style="padding: 80px 0;">
+            <h2 class="numbered-heading" data-number="05.">Beyond Data Science</h2>
+
+            <p style="font-size: 18px; margin-bottom: 40px; max-width: 700px;">
+                When I'm not building models, I'm passionate about giving back to my community
+                and staying active. Here are some things I do outside of work:
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+
+                <!-- Community Service -->
+                <div style="background-color: var(--light-navy); padding: 25px; border-radius: 4px;">
+                    <h3
+                        style="color: var(--coral); font-size: 18px; margin-bottom: 10px; font-family: var(--font-mono);">
+                        Community Service
+                    </h3>
+                    <p style="color: var(--lightest-slate); font-weight: 600; margin-bottom: 8px;">
+                        Sous Chef & Food Program Coordinator @ Broadway Community, Inc.
+                    </p>
+                    <p style="font-size: 14px; color: var(--slate); margin-bottom: 12px;">
+                        Sept 2023 - Present
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6;">
+                        Managed meal operational logistics for 250+ homeless and low-income guests weekly
+                        Mentored 300+ volunteers and contributed 500+ hours to food distribution
+                    </p>
+                    <a href="/food.html"
+                        style="color: var(--coral); font-family: var(--font-mono); font-size: 14px; text-decoration: none; transition: var(--transition);"
+                        onmouseover="this.style.color='#ff5544'" onmouseout="this.style.color='var(--coral)'">
+                        View Recipes & Stories →
+                    </a>
+                </div>
+
+                <!-- Education & Mentoring -->
+                <div style="background-color: var(--light-navy); padding: 25px; border-radius: 4px;">
+                    <h3
+                        style="color: var(--coral); font-size: 18px; margin-bottom: 10px; font-family: var(--font-mono);">
+                        Education & Mentoring
+                    </h3>
+                    <p style="color: var(--lightest-slate); font-weight: 600; margin-bottom: 8px;">
+                        Residential Counselor @ Academic Success Program, Columbia University
+                    </p>
+                    <p style="font-size: 14px; color: var(--slate); margin-bottom: 12px;">
+                        Summer 2023
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6;">
+                        Coordinated support services for 65 first-year students, tracking engagement and academic
+                        performance metrics
+                        Developed structured tutoring schedules and organized community-building activities.
+                    </p>
+                </div>
+
+                <!-- Hobbies -->
+                <div style="background-color: var(--light-navy); padding: 25px; border-radius: 4px;">
+                    <h3
+                        style="color: var(--coral); font-size: 18px; margin-bottom: 10px; font-family: var(--font-mono);">
+                        Hobbies & Interests
+                    </h3>
+                    <ul style="list-style: none; padding: 0; margin: 15px 0 0 0;">
+                        <li style="margin-bottom: 12px; padding-left: 20px; position: relative; font-size: 16px;">
+                            <span style="position: absolute; left: 0; color: var(--coral);">▹</span>
+                            <a href="/photography.html"
+                                style="color: var(--lightest-slate); text-decoration: none; transition: var(--transition);"
+                                onmouseover="this.style.color='var(--coral)'"
+                                onmouseout="this.style.color='var(--lightest-slate)'">Photography</a> - Capturingportraits, graduation photos and urban landscapes
+                        </li>
+
+
+                        <li style="margin-bottom: 12px; padding-left: 20px; position: relative; font-size: 16px;">
+                            <span style="position: absolute; left: 0; color: var(--coral);">▹</span>
+                            <a href="/cycling.html"
+                                style="color: var(--lightest-slate); text-decoration: none; transition: var(--transition);"
+                                onmouseover="this.style.color='var(--coral)'"
+                                onmouseout="this.style.color='var(--lightest-slate)'">Cycling</a> - Exploring NYC's bike
+                            trails and neighborhoods
+                        </li>
+                        <li style="margin-bottom: 12px; padding-left: 20px; position: relative; font-size: 16px;">
+                            <span style="position: absolute; left: 0; color: var(--coral);">▹</span>
+                            Tutoring - Mathematics, Statistics, and Spanish for grade school students
+                        </li>
+
+                    </ul>
+                </div>
+
+
+
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Customized by Jonathan Socoy | Template designed and built by <a href="https://brittanychiang.com"
+                target="_blank">Brittany
+                Chiang</a></p>
+    </footer>
+
+    <script>
+        // Experience Tabs
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanels = document.querySelectorAll('.experience-panel');
+        // Research Tabs (separate from experience tabs)
+        const researchButtons = document.querySelectorAll('.research-tab');
+
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabPanels.forEach(panel => panel.classList.remove('active'));
+
+                button.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        researchButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+
+                researchButtons.forEach(btn => btn.classList.remove('active'));
+
+                document.querySelectorAll('#research .experience-panel').forEach(panel => {
+                    panel.classList.remove('active');
+                });
+
+                button.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        // Smooth scroll offset for fixed nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
